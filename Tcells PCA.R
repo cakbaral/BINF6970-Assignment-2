@@ -28,7 +28,7 @@ PCA <-  prcomp(df_clean[,-(1:2)], center = T)
 # Auto plot PCA
 autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status")
 
-# PCA Justification using screeplot and reesult matrix----
+# PCA Justification using screeplot and result matrix----
 ## The sample covariance matrix
 #Original data frame used as it has the original data structure without string variables
 CVmatrix <- var(Df)
