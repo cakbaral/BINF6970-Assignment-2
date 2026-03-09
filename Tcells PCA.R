@@ -31,6 +31,9 @@ autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status")
 
 #Visualizing eigenvectors
 autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status", loadings= T)
+#Adding confidence interval ellipses
+autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status") + stat_ellipse(aes(group = Cell_type, colour = Cell_type), level = 0.95)
+
 
 
 
@@ -40,12 +43,15 @@ pca_data <- pca_data %>% mutate(Status = df_clean$Status,
                                 Cell_type = df_clean$Cell_type)
 #Plotting PC1 vs PC3
 #PC3 shows what seems to be an even distribution among the classes
-ggplot(pca_data, aes(x = PC1, y = PC3, colour = Cell_type, shape = Status)) +
+PC1_PC3 <- ggplot(pca_data, aes(x = PC1, y = PC3, colour = Cell_type, shape = Status)) +
   geom_point(size = 2) +
   theme_minimal() +
   labs(title = "PCA: PC1 vs PC3",
        x = "PC1",
-       y = "PC3")
+       y = "PC3") 
+PC1_PC3
+#Plot with ellipses 
+PC1_PC3 + stat_ellipse(aes(group = Cell_type, colour = Cell_type), level = 0.95)
 
 
 # PCA Justification using screeplot and result matrix----
