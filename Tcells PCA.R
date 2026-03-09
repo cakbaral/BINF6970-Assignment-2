@@ -26,7 +26,27 @@ df_clean <- Df %>%
 PCA <-  prcomp(df_clean[,-(1:2)], center = T)
 
 # Auto plot PCA
+#PLot shows distribution of dataset by cell type across PC1
 autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status")
+
+#Visualizing eigenvectors
+autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status", loadings= T)
+
+
+
+#Dataframe for PC1 vs PC3
+pca_data <- data.frame(PC1 = PCA$x[,1], PC3 = PCA$x[,3])
+pca_data <- pca_data %>% mutate(Status = df_clean$Status, 
+                                Cell_type = df_clean$Cell_type)
+#Plotting PC1 vs PC3
+#PC3 shows what seems to be an even distribution among the classes
+ggplot(pca_data, aes(x = PC1, y = PC3, colour = Cell_type, shape = Status)) +
+  geom_point(size = 2) +
+  theme_minimal() +
+  labs(title = "PCA: PC1 vs PC3",
+       x = "PC1",
+       y = "PC3")
+
 
 # PCA Justification using screeplot and result matrix----
 ## The sample covariance matrix
