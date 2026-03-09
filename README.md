@@ -25,3 +25,5 @@ Problem 2 Potentially useful links:
 - glmnet documentation: https://glmnet.stanford.edu/articles/glmnet.html
 - cv.glmnet documentation: https://haoen-cui.github.io/SOA-Exam-PA-R-Package-Documentation/glmnet/reference/cv.glmnet.html
 
+**Code**
+- Can a for loop be used to iterate through alpha search grid? (to be asked to Dr. Niazy)
