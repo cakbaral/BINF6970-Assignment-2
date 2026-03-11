@@ -19,7 +19,7 @@ library(dplyr)
 
 
 ## Read and prepare data----
-immunology <- read_excel("Immunologic profiles of patients with COVID-19.xlsx")
+immunology <- read_excel("Resources/Immunologic profiles of patients with COVID-19.xlsx")
 
 X <- model.matrix(~ . - 1, data = immunology[, c(2, 6:32)])
 Y <- as.factor(immunology$Severirty)
