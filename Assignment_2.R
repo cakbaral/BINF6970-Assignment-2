@@ -112,20 +112,23 @@ plot(cv_20fold, main = "Elastic Net (20-Fold) - CV Error")
 # 10-Fold
 model_10fold_min <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_min_10, 
-                         lambda = best_lambda_min_10)
+                         lambda = best_lambda_min_10,
+                         family = "binomial")
 
 
 model_10fold_1se <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_1se_10, 
-                         lambda = best_lambda_1se_10)
-
+                         lambda = best_lambda_1se_10,
+                         family = "binomial")
 
 # 20-Fold
 model_20fold_min <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_min_20, 
-                         lambda = best_lambda_min_20)
+                         lambda = best_lambda_min_20,
+                         family = "binomial")
 
 
 model_20fold_1se <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_1se_20, 
-                         lambda = best_lambda_1se_20)
+                         lambda = best_lambda_1se_20,
+                         family = "binomial")
