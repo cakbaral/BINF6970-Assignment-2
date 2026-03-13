@@ -32,11 +32,26 @@ set.seed(1717)
 # Split data into training and test data (75/25)
 
 train_index <- createDataPartition(Y, p = 0.75, list = FALSE)
-X_train <- X[train_index, ]
-X_test <- X[-train_index, ]
+X_train_prescaled <- X[train_index, ]
+X_test_prescaled <- X[-train_index, ]
 Y_train <- Y[train_index]
 Y_test <- Y[-train_index]
 
+
+# Standardize predictors (glmnet does this by default with standardize=TRUE)
+# But we'll scale manually for consistency across methods
+X_train <- scale(X_train_prescaled)
+X_test <- scale(X_test_prescaled, 
+                       center = attr(X_train, "scaled:center"),
+                       scale = attr(X_train, "scaled:scale"))
+
+# Remove any columns with NA values (if scaling creates them due to zero variance)
+na_cols <- which(colSums(is.na(X_train)) > 0)
+if (length(na_cols) > 0) {
+  X_train_scaled <- X_train[, -na_cols]
+  X_test_scaled <- X_test[, -na_cols]
+  cat("Removed", length(na_cols), "columns with zero variance\n")
+}
 
 # Cross-Validation----
 
@@ -149,24 +164,29 @@ ggplot(result_20_fold, aes(x = alpha)) +
 model_10fold_min <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_min_10, 
                          lambda = best_lambda_min_10,
+                         lambda_type = "min",
                          family = "binomial")
-
+                        
+                        
 
 model_10fold_1se <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_1se_10, 
                          lambda = best_lambda_1se_10,
+                         lambda_type = "1se",
                          family = "binomial")
 
 # 20-Fold
 model_20fold_min <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_min_20, 
                          lambda = best_lambda_min_20,
+                         lambda_type = "min",
                          family = "binomial")
 
 
 model_20fold_1se <- glmnet(X_train, Y_train, 
                          alpha = best_alpha_1se_20, 
                          lambda = best_lambda_1se_20,
+                         lambda_type = "1se",
                          family = "binomial")
 
 
@@ -200,22 +220,22 @@ extract_top_predictors <- function(model, n = 10, lambda_type = "min") {
   return(result)
 }
 
-# Extract top 10 predictors for each model
-m10_top_min <- extract_top_predictors(model_10fold_min, n = 10, lambda_type = "min")
+# Extract top 11 predictors for each model. 11 selected to try and identify impact of both age and the top 10 biomarkers (if that many)
+m10_top_min <- extract_top_predictors(model_10fold_min, n = 11, lambda_type = "min")
 print(m10_top_min)
 
-m10_top_lse <- extract_top_predictors(model_10fold_1se, n = 10, lambda_type = "1se")
+m10_top_lse <- extract_top_predictors(model_10fold_1se, n = 11, lambda_type = "1se")
 print(m10_top_lse)
 
-m20_top_min <- extract_top_predictors(model_20fold_min, n = 10, lambda_type = "min")
+m20_top_min <- extract_top_predictors(model_20fold_min, n = 11, lambda_type = "min")
 print(m20_top_min)
 
-m20_top_lse <- extract_top_predictors(model_20fold_1se, n = 10, lambda_type = "1se")
+m20_top_lse <- extract_top_predictors(model_20fold_1se, n = 11, lambda_type = "1se")
 print(m20_top_lse)
 
 
 # Function to calculate performance metrics
-calculate_metrics <- function(model, X_test, y_test, lambda_type = "min") {
+calculate_metrics <- function(model, X_test, Y_test, lambda_type = "min") {
   # Make predictions
   if (lambda_type == "min") {
     predictions <- predict(model, newx = X_test)
@@ -224,10 +244,10 @@ calculate_metrics <- function(model, X_test, y_test, lambda_type = "min") {
   }
   
   # Calculate metrics
-  mse <- mean((y_test - predictions)^2)
+  mse <- mean((Y_test - predictions)^2)
   rmse <- sqrt(mse)
-  mae <- mean(abs(y_test - predictions))
-  r_squared <- 1 - sum((y_test - predictions)^2) / sum((y_test - mean(y_test))^2)
+  mae <- mean(abs(Y_test - predictions))
+  r_squared <- 1 - sum((Y_test - predictions)^2) / sum((Y_test - mean(Y_test))^2)
   
   # Count non-zero coefficients (excluding intercept)
   if (lambda_type == "min") {
