@@ -204,13 +204,13 @@ extract_top_predictors <- function(model, n = 10, lambda_type = "min") {
 m10_top_min <- extract_top_predictors(model_10fold_min, n = 10, lambda_type = "min")
 print(m10_top_min)
 
-m10_top_lse <- extract_top_predictors(model_10fold_1se, n = 10, lambda_type = "min")
+m10_top_lse <- extract_top_predictors(model_10fold_1se, n = 10, lambda_type = "1se")
 print(m10_top_lse)
 
 m20_top_min <- extract_top_predictors(model_20fold_min, n = 10, lambda_type = "min")
 print(m20_top_min)
 
-m20_top_lse <- extract_top_predictors(model_20fold_1se, n = 10, lambda_type = "min")
+m20_top_lse <- extract_top_predictors(model_20fold_1se, n = 10, lambda_type = "1se")
 print(m20_top_lse)
 
 
@@ -241,7 +241,7 @@ calculate_metrics <- function(model, X_test, y_test, lambda_type = "min") {
 
 
 # Calculate metrics for all models
-#Note: we might need to scale when doing comparison. glmnet is supposed to do it by default, but crossing models might mess things up
+
 comparison <- data.frame()
 
 # 10-Fold
@@ -251,7 +251,7 @@ comparison <- rbind(comparison,
 
 comparison <- rbind(comparison, 
                     data.frame(Model = "10-Fold (lambda.1se)", 
-                               as.list(calculate_metrics(model_10fold_1se, X_test, Y_test, "min"))))
+                               as.list(calculate_metrics(model_10fold_1se, X_test, Y_test, "1se"))))
 
 # 20-Fold
 comparison <- rbind(comparison, 
@@ -260,6 +260,7 @@ comparison <- rbind(comparison,
 
 comparison <- rbind(comparison, 
                     data.frame(Model = "20-Fold (lambda.1se)", 
-                               as.list(calculate_metrics(model_20fold_1se, X_test, Y_test, "min"))))
+                               as.list(calculate_metrics(model_20fold_1se, X_test, Y_test, "1se"))))
 
 print(comparison)
+

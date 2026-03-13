@@ -6,7 +6,7 @@ library(GGally)
 library(ggfortify)
 #1. Data acquisition and preprocessing----
 #Load Data frame
-load("geneexpression2.rda")
+load("Resources/geneexpression2.rda")
 Df <- dat
 Df
 #Rownames are metadata to be converted before plotting PCA
