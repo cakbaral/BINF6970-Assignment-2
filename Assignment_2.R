@@ -260,7 +260,7 @@ calculate_metrics <- function(model, X_test, Y_test, lambda_type = "min") {
 }
 
 
-# Calculate metrics for all models
+# Calculate metrics for all models. We attempted to get a comparison table working for further cross-model metrics, but we could only get Non-Zero coefficient comparison working before the deadline.
 
 comparison <- data.frame()
 
