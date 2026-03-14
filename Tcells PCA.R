@@ -27,12 +27,12 @@ PCA <-  prcomp(df_clean[,-(1:2)], center = T)
 
 # Auto plot PCA
 #PLot shows distribution of dataset by cell type across PC1
-autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status")
-
+autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status", main = "PCA: PC1 vs PC2" )
+?autoplot()
 #Visualizing eigenvectors
-autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status", loadings= T)
+autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status", loadings= T,main = "PCA: PC1 vs PC2 with Eigenvectors" )
 #Adding confidence interval ellipses
-autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status") + stat_ellipse(aes(group = Cell_type, colour = Cell_type), level = 0.95)
+autoplot( PCA , data = df_clean, colour = "Cell_type", shape = "Status", main = "PCA: PC1 vs PC2") + stat_ellipse(aes(group = Cell_type, colour = Cell_type), level = 0.95)
 
 
 
