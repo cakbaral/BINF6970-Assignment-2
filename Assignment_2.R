@@ -97,7 +97,7 @@ best_lambda_1se_10 <- result_10_fold$lambda_1se[result_10_fold$alpha == best_alp
 
 
 #Plots for visualization and alpha grid search
-plot(cv_10fold, main = "Elastic Net (10-Fold) - CV Error")
+plot(cv_10fold, main = "Elastic Net (10-Fold) - Deviance")
 
 
 ggplot(result_10_fold, aes(x = alpha)) +
@@ -105,9 +105,9 @@ ggplot(result_10_fold, aes(x = alpha)) +
   geom_line(aes(y = cvm_1se, color = "lambda.1se"), size = 1.2) +
   geom_point(aes(y = cvm_min, color = "lambda.min"), size = 3) +
   geom_point(aes(y = cvm_1se, color = "lambda.1se"), size = 3) +
-  labs(title = "CV Error vs Alpha, 10-F0ld",
+  labs(title = "CV Error vs Alpha, 10-Fold",
        x = "Alpha (0=Ridge, 1=Lasso)",
-       y = "CV Error (MSE)",
+       y = "Deviance",
        color = "Lambda Type") +
   theme_minimal()
 
@@ -143,16 +143,16 @@ best_lambda_min_20 <- result_20_fold$lambda_min[result_20_fold$alpha == best_alp
 best_lambda_1se_20 <- result_20_fold$lambda_1se[result_20_fold$alpha == best_alpha_1se_20]
 
 #Plots for visualization and alpha grid search
-plot(cv_20fold, main = "Elastic Net (20-Fold) - CV Error")
+plot(cv_20fold, main = "Elastic Net (20-Fold) - Deviance")
 
 ggplot(result_20_fold, aes(x = alpha)) +
   geom_line(aes(y = cvm_min, color = "lambda.min"), size = 1.2) +
   geom_line(aes(y = cvm_1se, color = "lambda.1se"), size = 1.2) +
   geom_point(aes(y = cvm_min, color = "lambda.min"), size = 3) +
   geom_point(aes(y = cvm_1se, color = "lambda.1se"), size = 3) +
-  labs(title = "CV Error vs Alpha, 20-Fold",
+  labs(title = "Deviance vs Alpha, 20-Fold",
        x = "Alpha (0=Ridge, 1=Lasso)",
-       y = "CV Error (MSE)",
+       y = "Deviance",
        color = "Lambda Type") +
   theme_minimal()
 
